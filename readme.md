@@ -59,7 +59,7 @@ $ npm run build
 ## Credits
 
 - Nazia Parvez - Owner of https://formblu.com/ and creative mind behind the project
-- John-Michael Reed - Creator of the hardware and its [code](https://github.com/BleepLabs/Parvez-touch-pane). See their Github: [BleepLabs aka Dr. Bleep](https://github.com/BleepLabs)
+- John-Michael Reed - Creator of the hardware and its [code](https://github.com/BleepLabs/Parvez-touch-panel). See their Github: [BleepLabs aka Dr. Bleep](https://github.com/BleepLabs)
 
 ## Built With
 
