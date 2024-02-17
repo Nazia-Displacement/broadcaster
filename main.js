@@ -58,8 +58,10 @@ function createWindow() {
 
   // Prevent the X button from killing the window. Instead Send it to the system tray.
   mainWindow.on("close", function (event) {
-    event.preventDefault();
-    mainWindow.hide();
+    if (process.platform !== "darwin") {
+      event.preventDefault();
+      mainWindow.hide();
+    }
   });
 }
 

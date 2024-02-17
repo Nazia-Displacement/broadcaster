@@ -17,7 +17,7 @@ v18.18.2
 
 ## Table of contents
 
-- [Displacement MIDI Broadcaster](#Displacement-MIDI-Broadcaster)
+- [Displacement MIDI Broadcaster](#displacement-midi-broadcaster)
   - [Prerequisites](#prerequisites)
   - [Table of contents](#table-of-contents)
   - [Getting Started](#getting-started)
@@ -39,9 +39,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 Start with cloning this repo on your local machine:
 To install the needed modules run in the project directory:
+
 ```sh
 npm install
 ```
+
 ## Usage
 
 ### Serving the app

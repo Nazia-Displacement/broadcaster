@@ -23,5 +23,32 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "midi": "^2.0.0"
-  }
+  },
+  "makers": [
+    {
+      "name": "'@electron-forge/maker-dmg'",
+      "config": {
+        "icon": "./logo.png"
+      }
+    },
+    {
+      "name": "@electron-forge/maker-squirrel",
+      "config": {
+        "authors": "Isaac Hisey",
+        "iconUrl": "./logo.png",
+        "exe": "midi-broadcaster.exe",
+        "name": "midi-broadcaster"
+      }
+    },
+    {
+      "name": "'@electron-forge/maker-deb'",
+      "config": {
+        "options": {
+          "bin": "midi-broadcaster",
+          "maintainer": "Isaac Hisey",
+          "homepage": "https://isaachisey.com"
+        }
+      }
+    }
+  ]
 }
