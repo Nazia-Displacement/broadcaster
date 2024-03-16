@@ -50,6 +50,7 @@ function createWindow() {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      devTools: true,
     },
     icon: path.join(__dirname, "./logo.png"),
     title: "Midi to Server",
