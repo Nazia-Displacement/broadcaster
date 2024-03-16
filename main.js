@@ -57,6 +57,7 @@ function createWindow() {
   });
 
   mainWindow.loadFile("index.html");
+  mainWindow.openDevTools();
 
   // Prevent the X button from killing the window. Instead Send it to the system tray.
   mainWindow.on("close", function (event) {
