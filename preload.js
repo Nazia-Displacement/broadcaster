@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getOpenedPort: () => ipcRenderer.send("getOpenedPort"),
   openPort: (port) => ipcRenderer.send("openPort", port),
   closePort: () => ipcRenderer.send("closePort"),
+  updatePanel: (value) => ipcRenderer.send("updatePanel", value),
   receive: (channel, func) => {
     let validChannels = ["MidiMessage", "PortOpened", "PortClosed"];
     if (validChannels.includes(channel)) {

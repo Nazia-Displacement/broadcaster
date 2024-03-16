@@ -77,6 +77,11 @@ function connectSocket() {
       secret: socketLoginSecret.value,
     },
   });
+
+  socket.on("panel-update", (value) => {
+    console.log(value);
+    window.electronAPI.updatePanel(value);
+  });
 }
 
 function checkConnection() {

@@ -16,6 +16,7 @@ require("./customMenu.js");
 // ############################################################################
 let mainWindow; // Global variable referencing the applications visible window
 let input; // Global variable housing the midi input data
+let output; // Gloval Variable house the midi output data
 let currentPort = -1; // Global variable denoting the currently open Midi port
 
 // Regarding the currentPort global -1 means no port in this application.
@@ -70,6 +71,7 @@ function createWindow() {
 // ############################################################################
 
 input = new midi.Input();
+output = new midi.Output();
 input.ignoreTypes(false, false, false); // ignore subsets of midi data we are not using
 
 // This function runs every noteOn, noteOff, and controllerchanged, amongst others.
@@ -114,8 +116,11 @@ function getOpenedPort() {
 
 function openPort(port) {
   input.closePort();
+  output.closePort();
+
   try {
     input.openPort(Number(port));
+    output.openPort(Number(port));
     currentPort = port;
   } catch (e) {
     // if the port is not valid give the user some indication and steps to fix.
@@ -139,8 +144,14 @@ function openPort(port) {
 
 function closePort() {
   input.closePort();
+  output.closePort();
   currentPort = -1;
   mainWindow.webContents.send("PortOpened", `None`);
+}
+
+function updatePanel(value) {
+  console.log("Here with value! " + value);
+  output.sendMessage([144, 60, value]);
 }
 
 // ############################################################################
@@ -152,6 +163,7 @@ app.whenReady().then(() => {
   ipcMain.on("getOpenedPort", getOpenedPort);
   ipcMain.on("openPort", (ev, port) => openPort(port));
   ipcMain.on("closePort", closePort);
+  ipcMain.on("updatePanel", (ev, value) => updatePanel(value));
 
   // Setup visuals and behaviors for tray icon.
   var appIcon = new Tray(path.join(__dirname, "./logo.png"));
