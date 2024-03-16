@@ -153,7 +153,7 @@ function closePort() {
 
 function updatePanel(value) {
   console.log("Here with value! " + value);
-  output.sendMessage([144, 20, value]);
+  output.sendMessage([176, 20, value]);
 }
 
 // ############################################################################
