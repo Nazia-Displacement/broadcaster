@@ -1,19 +1,17 @@
 ## Displacement MIDI Broadcaster
 
-> This application is meant to run on the computer connected to the panel for the displacement project https://formblu.com/displacement. The application will intake midi data and broadcast it to the server connecting Unity clients via socket.io.
+> This application is designed to operate on the computer connected to the panel for the [Displacement](https://formblu.com/displacement) project. It receives MIDI data and broadcasts it to the server, enabling connections with Unity clients through Socket.IO.
 
 ## Prerequisites
 
-This project is tested on the following Node and NPM versions.
-[Node](http://nodejs.org/) and [NPM](https://npmjs.org/) are really easy to install.
-To make sure you have them available on your machine,
-try running the following command.
+This project is tested on the following Node and NPM versions. [Node](http://nodejs.org/) and [NPM](https://npmjs.org/) are really easy to install. To make sure you have them available on your machine, try running the following command.
 
 ```sh
 $ npm -v && node -v
-9.8.1
-v18.18.2
 ```
+
+9.8.1  
+v18.18.2
 
 ## Table of contents
 
@@ -37,8 +35,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 **BEFORE YOU INSTALL:** please read the [prerequisites](#prerequisites)
 
-Start with cloning this repo on your local machine:
-To install the needed modules run in the project directory:
+Start with cloning this repo on your local machine: To install the needed modules run in the project directory:
 
 ```sh
 npm install
@@ -60,8 +57,7 @@ $ npm run build
 
 ## Credits
 
-- Nazia Parvez - Owner of https://formblu.com/ and creative mind behind the project
-- John-Michael Reed - Creator of the hardware and its [code](https://github.com/BleepLabs/Parvez-touch-panel). See their Github: [BleepLabs aka Dr. Bleep](https://github.com/BleepLabs)
+- [Displacement Team](https://formblu.com/displacement-prototyping)
 
 ## Built With
 
