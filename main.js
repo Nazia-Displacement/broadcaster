@@ -69,7 +69,7 @@ function createWindow() {
 }
 
 // ############################################################################
-// # Setup Midi Input
+// # Setup Midi Input && Output
 // ############################################################################
 
 input = new midi.Input();
@@ -90,7 +90,7 @@ input.on("message", (deltaTime, message) => {
 // ############################################################################
 
 // Gets all the midi devices and their ports the system can find
-// Some odd behavoir to point out. This function doens't seems to
+// Some odd behavoir to point out. This function doesn't seem to
 // remove ports once they have been found. I've attempted a few
 // work arounds but to no avail. A restart of the app may be required
 // in some cases.
@@ -152,8 +152,27 @@ function closePort() {
 }
 
 function updatePanel(value) {
-  console.log("Here with value! " + value);
-  output.sendMessage([176, 20, value]);
+  if (currentPort > -1)
+    output.sendMessage([176, 20, value]);
+}
+
+function updateColors(colors) {
+  if (currentPort < 0) return;
+
+  if(colors.length < 1) {
+    output.sendMessage([200, 0, 0]); // Clear LED Colors
+    output.sendMessage([100, 0, 0]); // Update LEDs
+  }
+
+  output.sendMessage([0, colors.length, 0]); // Initialize Array
+
+  colors.forEach((rgb, idx) => {
+    output.sendMessage([idx+1, 0, rgb.r]); // For each index of the array set the red value
+    output.sendMessage([idx+1, 1, rgb.g]); // For each index of the array set the green value
+    output.sendMessage([idx+1, 2, rgb.b]); // For each index of the array set the blue value
+  });
+
+  output.sendMessage([100, 0, 0]); // Update LEDs
 }
 
 // ############################################################################
@@ -166,6 +185,7 @@ app.whenReady().then(() => {
   ipcMain.on("openPort", (ev, port) => openPort(port));
   ipcMain.on("closePort", closePort);
   ipcMain.on("updatePanel", (ev, value) => updatePanel(value));
+  ipcMain.on("updateColors", (ev, value) => updateColors(value));
 
   // Setup visuals and behaviors for tray icon.
   var appIcon = new Tray(path.join(__dirname, "./logo.png"));

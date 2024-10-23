@@ -71,16 +71,21 @@ function connectSocket() {
   if (socket) socket.disconnect();
 
   console.log(socketLoginSecret.value);
-  socket = io("https://displacementserver.isaachisey.com", {
+  socket = io("http://127.0.0.1:3001", {
+  //socket = io("https://displacementserver.isaachisey.com", {
     query: {
       token: "Nazia.MIDI.Project",
       secret: socketLoginSecret.value,
     },
   });
-
-  socket.on("panel-update", (value) => {
+  
+  socket.on("panel_update", (value) => {
     console.log(value);
     window.electronAPI.updatePanel(value);
+  });
+
+  socket.on("lights_update", (colors) => {
+    window.electronAPI.updateColors(colors);
   });
 }
 
