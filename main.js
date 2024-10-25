@@ -161,19 +161,19 @@ function updateColors(colors) {
 
   if(colors.length < 1) {
     output.sendMessage([128, 0, 0]); // Clear LED Colors
-    output.sendMessage([144, 0, 0]); // Update LEDs
   }
+  else {
+    output.sendMessage([192, colors.length, 0]); // Initialize Array
 
-  output.sendMessage([192, colors.length, 0]); // Initialize Array
+    colors.forEach((rgb, idx) => {
+      output.sendMessage([176, idx, 0]); // For each index of the array set the active index in arduino memory
+      output.sendMessage([160, 0, Math.floor(rgb.r/2)]); // For each index of the array set the red value
+      output.sendMessage([160, 1, Math.floor(rgb.g/2)]); // For each index of the array set the green value
+      output.sendMessage([160, 2, Math.floor(rgb.b/2)]); // For each index of the array set the blue value
+    });
 
-  colors.forEach((rgb, idx) => {
-    output.sendMessage([176, idx, 0]); // For each index of the array set the active index in arduino memory
-    output.sendMessage([160, 0, rgb.r]); // For each index of the array set the red value
-    output.sendMessage([160, 1, rgb.g]); // For each index of the array set the green value
-    output.sendMessage([160, 2, rgb.b]); // For each index of the array set the blue value
-  });
-
-  output.sendMessage([144, 0, 0]); // Update LEDs
+    output.sendMessage([208, 0, 0]); // Update LEDs
+  }
 }
 
 // ############################################################################
