@@ -15,7 +15,6 @@ require("./customMenu.js");
 // # Global variables
 // ############################################################################
 let mainWindow; // Global variable referencing the applications visible window
-let input; // Global variable housing the midi input data
 let output; // Gloval Variable house the midi output data
 let currentPort = -1; // Global variable denoting the currently open Midi port
 
@@ -69,21 +68,20 @@ function createWindow() {
 }
 
 // ############################################################################
-// # Setup Midi Input && Output
+// # Setup Midi Output
 // ############################################################################
 
-input = new midi.Input();
 output = new midi.Output();
-input.ignoreTypes(false, false, false); // ignore subsets of midi data we are not using
+//output.ignoreTypes(false, false, false); // ignore subsets of midi data we are not using
 
 // This function runs every noteOn, noteOff, and controllerchanged, amongst others.
-input.on("message", (deltaTime, message) => {
+/*output.on("message", (deltaTime, message) => {
   // The message is an array of numbers corresponding to the MIDI bytes:
   //   [status, data1, data2]
   // https://www.cs.cf.ac.uk/Dave/Multimedia/node158.html has some helpful
   // information interpreting the messages.
   mainWindow.webContents.send("MidiMessage", { message, deltaTime });
-});
+});*/
 
 // ############################################################################
 // # IPC handling functions
@@ -97,11 +95,13 @@ input.on("message", (deltaTime, message) => {
 function updateMidiPorts() {
   // Store port names in an array
   const ports = [];
-  // Count the available input ports and loop through them.
-  for (let i = 0; i < input.getPortCount(); i++) {
-    // Get the name of each input port.
-    ports.push(input.getPortName(i));
+  // Count the available output ports and loop through them.
+  for (let i = 0; i < output.getPortCount(); i++) {
+    // Get the name of each output port.
+    console.log(i, " ", output.getPortName(i))
+    ports.push(output.getPortName(i));
   }
+  console.log(ports);
   // return array of names to caller
   return ports;
 }
@@ -117,11 +117,9 @@ function getOpenedPort() {
 }
 
 function openPort(port) {
-  input.closePort();
   output.closePort();
 
   try {
-    input.openPort(Number(port));
     output.openPort(Number(port));
     currentPort = port;
   } catch (e) {
@@ -145,7 +143,6 @@ function openPort(port) {
 }
 
 function closePort() {
-  input.closePort();
   output.closePort();
   currentPort = -1;
   mainWindow.webContents.send("PortOpened", `None`);
@@ -157,23 +154,31 @@ function updatePanel(value) {
 }
 
 function updateColors(colors) {
-  if (currentPort < 0) return;
+  try {
+    if (currentPort < 0) return;
 
-  if(colors.length < 1) {
-    output.sendMessage([128, 0, 0]); // Clear LED Colors
+    if(colors.length < 1) {
+      output.sendMessage([128, 0, 0]); // Clear LED Colors
+    }
+    else {
+      output.sendMessage([192, colors.length, 0]); // Initialize Array
+
+      colors.forEach((rgb, idx) => {
+        output.sendMessage([176, idx, 0]); // For each index of the array set the active index in arduino memory
+        output.sendMessage([160, 0, Math.floor(rgb.r/2)]); // For each index of the array set the red value
+        output.sendMessage([160, 1, Math.floor(rgb.g/2)]); // For each index of the array set the green value
+        output.sendMessage([160, 2, Math.floor(rgb.b/2)]); // For each index of the array set the blue value
+      });
+
+      output.sendMessage([208, 0, 0]); // Update LEDs
+    }
   }
-  else {
-    output.sendMessage([192, colors.length, 0]); // Initialize Array
-
-    colors.forEach((rgb, idx) => {
-      output.sendMessage([176, idx, 0]); // For each index of the array set the active index in arduino memory
-      output.sendMessage([160, 0, Math.floor(rgb.r/2)]); // For each index of the array set the red value
-      output.sendMessage([160, 1, Math.floor(rgb.g/2)]); // For each index of the array set the green value
-      output.sendMessage([160, 2, Math.floor(rgb.b/2)]); // For each index of the array set the blue value
-    });
-
-    output.sendMessage([208, 0, 0]); // Update LEDs
+  catch(e)
+  {
+    console.log(e);
   }
+
+  mainWindow.webContents.send("MidiMessage", { message: colors.length, deltaTime:0 });
 }
 
 // ############################################################################
@@ -222,7 +227,7 @@ app.whenReady().then(() => {
   const ports = updateMidiPorts();
   // If there are devices connected then connect to the first one
   if (ports.length > 0) {
-    input.openPort(0);
+    output.openPort(0);
     currentPort = 0;
   }
 });

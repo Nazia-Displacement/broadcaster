@@ -71,8 +71,8 @@ function connectSocket() {
   if (socket) socket.disconnect();
 
   console.log(socketLoginSecret.value);
-  socket = io("http://127.0.0.1:3001", {
-  //socket = io("https://displacementserver.isaachisey.com", {
+  //socket = io("http://127.0.0.1:3001", {
+  socket = io("https://displacementserver.isaachisey.com", {
     query: {
       token: "Nazia.MIDI.Project",
       secret: socketLoginSecret.value,
