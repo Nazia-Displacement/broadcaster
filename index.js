@@ -55,8 +55,8 @@ async function updatePortList() {
     portList.removeChild(portList.firstChild);
   }
   const ports = await window.electronAPI.updateMidiPorts();
-  const optionElm = document.createElement("option");
   ports.forEach((p, i) => {
+    const optionElm = document.createElement("option");
     optionElm.value = i;
     optionElm.innerText = `${p}`;
     portList.append(optionElm);
